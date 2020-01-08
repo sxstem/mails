@@ -1,5 +1,5 @@
 <?php
-namespace Yy;
+namespace Sxstem\Mails;
 class Smtp extends Config
 {
 
