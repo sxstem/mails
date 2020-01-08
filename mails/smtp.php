@@ -2,6 +2,29 @@
 namespace Yy;
 class Smtp extends Config
 {
+
+	/**
+	 * Connect smtp
+	 * @username string
+	 * @password string
+	 */
+	public function __construct($username, $password)
+	{
+		$this->type = 'smtp';
+
+		//设置用户名
+		$this->username = $username;
+
+		//设置邮箱类型url：163，QQ等
+		$host = explode('@', $username)[1];
+		$this->setConfig($host);
+
+		//设置密码
+		$this->password = $password;
+
+		$this->smtpOpen();
+	}
+
 	private function ini()
 	{
 		// 握手
@@ -14,6 +37,21 @@ class Smtp extends Config
 		$this->execute($this->stream,  base64_encode($this->password) . "\r\n", '235');
 	}
 
+
+	/**
+	 * send mail
+	 * @subject string
+	 * @to array
+	 * @cc array
+	 * @mails_body string
+	 * @in_reply_to string
+	 * @references string
+	 * @attach file
+	 *
+	 * cc :copy to (mail address)
+	 * in_reply_to (The message_id of the email you replied to)
+	 * references string (The message_id of the historical reply message)
+	 */
 	public function send($subject, $to = array(), $cc = array(), $mails_body, $in_reply_to, $references, $attach)
 	{
 		// 初始化邮件发送设置
