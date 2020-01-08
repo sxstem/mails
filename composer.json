@@ -5,15 +5,15 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Morton",
-            "email": "865240848@qq.com"
+            "name": "Mails",
+            "email": ""
         }
     ],
     "minimum-stability": "dev",
     "require": {},
     "autoload": {
         "psr-4": {
-            "sxstem\\mails\\":"mails/"
+            "Sxstem\\Mails\\":"mails/"
         }
     }
 }
