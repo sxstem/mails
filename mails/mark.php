@@ -1,6 +1,6 @@
 <?php
 namespace Sxstem\Mails;
-class Mark extends \Yy\Config
+class Mark extends Config
 {
 	/**
 	 * mark read
