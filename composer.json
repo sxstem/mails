@@ -1,0 +1,19 @@
+{
+    "name": "sxstem/mails",
+    "description": "Mails",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Morton",
+            "email": "865240848@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "sxstem\\mails\\":"mails/"
+        }
+    }
+}
