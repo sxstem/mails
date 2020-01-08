@@ -2,8 +2,11 @@
 
 #GET
 $mail = new \Sxstem\Mails\Imap(username, passwork, [mailbox]);  //The mailbox defaults to inbox
+
 $result = $mail->getBoxes(); //get folder
+
 //$result = $mail->getUid();  //before this,you can use $mail->setBeginDate(),$mail->setEndDate() to set bigin date, end date
+
 //$result = $mail->getHeader($uid); //Not passing the uid means getting the headers for all messages under the current mailbox
 //$result = $mail->getMsgnoByUid($uid);
 //$result = $mail->getBody($msgno);
