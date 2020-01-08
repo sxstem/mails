@@ -51,7 +51,7 @@ class Config
 	protected $end_date = '';
 
 	/**
-	 * Connected mailbox resources
+	 * Connected folder resources
 	 * @var resources
 	 */
 	protected $stream;
@@ -102,7 +102,7 @@ class Config
 	 * reconnect imap
 	 * @folder string
 	 */
-	public function setFolder($folder)
+	public function setFolder($folder )
 	{
 		if (!empty($this->folder))
 		{

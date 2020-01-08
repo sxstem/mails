@@ -4,20 +4,20 @@ class Imap extends Config
 {
 
 	/**
-	 * Get the subscription mailbox
+	 * Get the subscription folder
 	 * Such as inbox, sent
 	 * @return array
 	 */
-	public function getBoxes()
+	public function getFolder()
 	{
 		try
 		{
 			$result = imap_list($this->stream, '{imap.example.org}', '*');
 			foreach ($result as $name)
 			{
-				$boxes []= imap_mutf7_to_utf8(str_replace('{imap.example.org}', '', $name));
+				$folder []= imap_mutf7_to_utf8(str_replace('{imap.example.org}', '', $name));
 			}
-			return $boxes;
+			return $folder;
 		}
 		catch (Exception $ex)
 		{
@@ -65,7 +65,7 @@ class Imap extends Config
 	/**
 	 * Get mail header
 	 * @uid array
-	 * Not passing the uid means getting the headers for all messages under the current mailbox
+	 * Not passing the uid means getting the headers for all messages under the current folder
 	 * @return array
 	 */
 	public function getHeader($uid = array())
