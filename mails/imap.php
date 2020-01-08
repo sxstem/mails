@@ -81,7 +81,7 @@ class Imap extends Config
 				$uid = is_array($uid) ? $uid : array($uid);
 				foreach ($uid as $u)
 				{
-					$msgno = getMsgnoByUid($u);
+					$msgno = $this->getMsgnoByUid($u);
 					$header = imap_header($this->stream, $msgno);
 					if ($header)
 					{
