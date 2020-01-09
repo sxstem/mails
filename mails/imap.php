@@ -245,7 +245,7 @@ class Imap extends Config
 				$data['body'] = base64_encode($body);
 				$data['type'] = $this->getBodyType(intval($structure->type));
 				$data['content_type'] = $structure->subtype;
-				if ($structure->type != 0)
+				if ($structure->ifdisposition)
 				{
 					if (isset($structure->dparameters) && is_array($structure->dparameters))
 					{
