@@ -1,13 +1,20 @@
-# mails
+Mails, PHP Mails
+=======================
 
+## Install
 
-The recommended way to install is through Composer.
-```composer require sxstem/mails```
+The recommended way to install sxstem/mails is through
+[Composer](http://getcomposer.org).
+
+```bash
+composer require sxstem/mails
+```
 
 
 ## Example
-### GET
-```
+
+- GET
+```php
 $mail = new \Sxstem\Mails\Imap(username, passwork, [mailbox]);  //The mailbox defaults to inbox
 
 $result = $mail->getFolder(); //get folder
@@ -26,8 +33,8 @@ $mail->imapClose();
 ```
 
 
-### Mark
-```
+- Mark
+```php
 $mail = new \Sxstem\Mails\Mark(username, passwork, [mailbox]);
 
 $result = $mail->set_seen($uid);
@@ -47,8 +54,8 @@ $result = $mail->set_seen($uid);
 $mail->imapClose();
 ```
 
-### SMTP
-```
+- SMTP
+```php
 $mail = new \Sxstem\Mails\Smtp(username, passwork);
 
 $result = $mail->send($subject, $to, $cc, $mails_body, $in_reply_to, $references, $attach);
