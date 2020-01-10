@@ -2,11 +2,11 @@
 
 
 The recommended way to install is through Composer.
-`composer require sxstem/mails`
+```composer require sxstem/mails```
 
 
-##Example
-###GET
+## Example
+### GET
 ```
 $mail = new \Sxstem\Mails\Imap(username, passwork, [mailbox]);  //The mailbox defaults to inbox
 
@@ -26,7 +26,7 @@ $mail->imapClose();
 ```
 
 
-###Mark
+### Mark
 ```
 $mail = new \Sxstem\Mails\Mark(username, passwork, [mailbox]);
 
@@ -47,7 +47,7 @@ $result = $mail->set_seen($uid);
 $mail->imapClose();
 ```
 
-###SMTP
+### SMTP
 ```
 $mail = new \Sxstem\Mails\Smtp(username, passwork);
 
