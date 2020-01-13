@@ -1,4 +1,6 @@
 <?php
+namespace Sxstem\Mails;
+use Exception;
 class Config
 {
 	/**

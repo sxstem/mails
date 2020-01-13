@@ -1,4 +1,5 @@
 <?php
+namespace Sxstem\Mails;
 class Mark extends Config
 {
 	/**

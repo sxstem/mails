@@ -1,4 +1,7 @@
 <?php
+
+namespace Sxstem\Mails;
+use Exception;
 class Smtp extends Config
 {
 
