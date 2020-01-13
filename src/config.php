@@ -1,5 +1,5 @@
 <?php
-class MailConfig
+class Config
 {
 	/**
 	 * username

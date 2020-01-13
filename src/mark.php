@@ -1,5 +1,5 @@
 <?php
-class MailMark extends MailConfig
+class Mark extends Config
 {
 	/**
 	 * mark read

@@ -1,5 +1,5 @@
 <?php
-class MailImap extends MailConfig
+class Imap extends Config
 {
 
 	/**

@@ -1,5 +1,5 @@
 <?php
-class MailSmtp extends MailConfig
+class Smtp extends Config
 {
 
 	/**
