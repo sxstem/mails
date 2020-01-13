@@ -1,6 +1,5 @@
 <?php
-namespace Sxstem\Mails;
-class Config
+class MailConfig
 {
 	/**
 	 * username

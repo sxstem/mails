@@ -1,6 +1,5 @@
 <?php
-namespace Sxstem\Mails;
-class Smtp extends Config
+class MailSmtp extends MailConfig
 {
 
 	/**

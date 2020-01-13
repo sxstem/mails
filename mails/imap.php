@@ -1,6 +1,5 @@
 <?php
-namespace Sxstem\Mails;
-class Imap extends Config
+class MailImap extends MailConfig
 {
 
 	/**
@@ -135,7 +134,7 @@ class Imap extends Config
 			$header_info['Uid'] = $uid;
 			$header_info['Date'] = date('Y-m-d H:i:s', (isset($header->Date) ? strtotime($header->Date) : strtotime($header->MailDate)));
 			$header_info['FromAddress'] = imap_utf8($header->fromaddress);
-			$header_info['ToAddress'] = imap_utf8($header->toaddress);
+			$header_info['ToAddress'] = empty($header->toaddress) ? '' : imap_utf8($header->toaddress);
 			$header_info['CcAddress'] = '';
 			$header_info['ReplyToAddress'] = isset($header->reply_toaddress) ? imap_utf8($header->reply_toaddress) : '';
 			$header_info['SenderAddress'] = isset($header->senderaddress) ? imap_utf8($header->senderaddress) : '';
