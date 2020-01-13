@@ -30,13 +30,13 @@ class Smtp extends Config
 	private function ini()
 	{
 		// 握手
-		$this->execute($this->stream, "HELO {$this->smtp}\r\n", '250');
+		$this->execute($this->stream, "HELO {$this->smtp}\r\n");
 		// 登录验证
-		$this->execute($this->stream, "AUTH LOGIN\r\n", '334');
+		$this->execute($this->stream, "AUTH LOGIN\r\n");
 		// 账号验证
-		$this->execute($this->stream,  base64_encode($this->username) . "\r\n", '334');
+		$this->execute($this->stream,  base64_encode($this->username) . "\r\n");
 		// 密码验证
-		$this->execute($this->stream,  base64_encode($this->password) . "\r\n", '235');
+		$this->execute($this->stream,  base64_encode($this->password) . "\r\n");
 	}
 
 
@@ -59,16 +59,16 @@ class Smtp extends Config
 		// 初始化邮件发送设置
 		$this->ini();
 		// 发件人
-		$this->execute($this->stream, 'MAIL FROM:<' . $this->username . ">\r\n", '250');
+		$this->execute($this->stream, 'MAIL FROM:<' . $this->username . ">\r\n");
 		// 收件人
 		foreach ($to as $t)
 		{
-			$this->execute($this->stream, 'RCPT TO:<' . $t . ">\r\n", '250');
+			$this->execute($this->stream, 'RCPT TO:<' . $t . ">\r\n");
 		}
 		// 抄送人
 		foreach ($cc as $c)
 		{
-			$this->execute($this->stream, 'RCPT TO:<' . $c . ">\r\n", '250');
+			$this->execute($this->stream, 'RCPT TO:<' . $c . ">\r\n");
 		}
 		// 邮件内容
 		$body = 'From:' . $this->username . "\r\n";
@@ -106,20 +106,21 @@ class Smtp extends Config
 		}
 		$body .= '--' . $boundary . "--\r\n";
 		$body .= "\r\n.\r\n";
-		$this->execute($this->stream, "DATA\r\n", '354');
-		$this->execute($this->stream, $body, '250');
-		$this->execute($this->stream, "QUIT\r\n", '221');
+		$this->execute($this->stream, "DATA\r\n");
+		$this->execute($this->stream, $body);
+		$this->execute($this->stream, "QUIT\r\n");
 	}
 
-	private function execute($handle, $command, $status)
+	private function execute($handle, $command)
 	{
 		try
 		{
 			fwrite($handle, $command);
 			$handle_status = fgets($handle);
-			if (strstr($handle_status, $status) === false)
+			$status = '/^(5|4)/';
+			if(preg_match($status, $handle_status, $matches))
 			{
-				throw new Exception('邮件发送失败：' . $status . ', ' . $command);
+				throw new Exception('邮件发送失败：' . $handle_status . ', ' . $command);
 			}
 		}
 		catch (Exception $ex)
