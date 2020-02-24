@@ -122,11 +122,11 @@ class Config
 		}
 		catch (Exception $ex)
 		{
-			throw new Exception($ex->getMessage());
+			throw new Exception('连接邮箱失败' . $ex->getMessage());
 		}
 		catch (Error $er)
 		{
-			throw new Error($er->getMessage());
+			throw new Error('连接邮箱失败' . $er->getMessage());
 		}
 	}
 
@@ -155,11 +155,11 @@ class Config
 		}
 		catch (Exception $ex)
 		{
-			throw new Exception($ex->getMessage());
+			throw new Exception('邮件服务器连接失败' . $ex->getMessage());
 		}
 		catch (Error $er)
 		{
-			throw new Error($er->getMessage());
+			throw new Error('邮件服务器连接失败' . $er->getMessage());
 		}
 	}
 

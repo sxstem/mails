@@ -22,11 +22,11 @@ class Imap extends Config
 		}
 		catch (Exception $ex)
 		{
-			throw new Exception($ex->getMessage());
+			throw new Exception('获取文件夹错误' . $ex->getMessage());
 		}
 		catch (Error $er)
 		{
-			throw new Error($er->getMessage());
+			throw new Error('获取文件夹错误' . $er->getMessage());
 		}
 	}
 
@@ -55,11 +55,11 @@ class Imap extends Config
 		}
 		catch (Exception $ex)
 		{
-			throw new Exception($ex->getMessage());
+			throw new Exception('获取UID错误' . $ex->getMessage());
 		}
 		catch (Error $er)
 		{
-			throw new Error($er->getMessage());
+			throw new Error('获取UID错误' . $er->getMessage());
 		}
 	}
 
@@ -171,11 +171,11 @@ class Imap extends Config
 		}
 		catch (Exception $ex)
 		{
-			throw new Exception($ex->getMessage());
+			throw new Exception('整理邮件头失败，UID::' . $ex->getMessage());
 		}
 		catch (Error $er)
 		{
-			throw new Error($er->getMessage());
+			throw new Error('整理邮件头失败，UID:::' . $er->getMessage());
 		}
 	}
 
@@ -274,11 +274,11 @@ class Imap extends Config
 		}
 		catch (Exception $ex)
 		{
-			throw new Exception($ex->getMessage());
+			throw new Exception('获取邮件内容失败，MsgNo:' . $ex->getMessage());
 		}
 		catch (Error $er)
 		{
-			throw new Error($er->getMessage());
+			throw new Error('获取邮件内容失败，MsgNo:' . $er->getMessage());
 		}
 	}
 
