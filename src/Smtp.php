@@ -30,8 +30,14 @@ class Smtp extends Config
 	private function ini()
 	{
 		// 握手
-		$this->execute($this->stream, "HELO {$this->smtp}\r\n");
+		$this->execute($this->stream, "EHLO " . str_replace('ssl://', '', $this->smtp) . "\r\n");
 		// 登录验证
+		if ($this->smtp_proxy == '587')
+		{
+			$this->execute($this->stream, "STARTTLS\r\n");
+			stream_socket_enable_crypto($this->stream, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
+			$this->execute($this->stream, "EHLO " . str_replace('ssl://', '', $this->smtp) . "\r\n");
+		}
 		$this->execute($this->stream, "AUTH LOGIN\r\n");
 		// 账号验证
 		$this->execute($this->stream,  base64_encode($this->username) . "\r\n");
@@ -46,15 +52,16 @@ class Smtp extends Config
 	 * @to array
 	 * @cc array
 	 * @mails_body string
+	 * @attach array
 	 * @in_reply_to string
 	 * @references string
-	 * @attach file
 	 *
+	 * attach: file
 	 * cc :copy to (mail address)
 	 * in_reply_to (The message_id of the email you replied to)
 	 * references string (The message_id of the historical reply message)
 	 */
-	public function send($subject, $to = array(), $cc = array(), $mails_body, $in_reply_to, $references, $attach)
+	public function send($subject, $to = array(), $cc = array(), $mails_body, $attach = array(), $in_reply_to = '', $references = '')
 	{
 		// 初始化邮件发送设置
 		$this->ini();
@@ -83,8 +90,8 @@ class Smtp extends Config
 		$boundary = 'part_' . uniqid();
 		$body .= 'Subject:' . $subject . "\r\n";
 		$body .= 'Date:' . date('Y-m-d H:i:s', time()) . "\r\n";
-		$body .= 'In-Reply-To:' . $in_reply_to . "\r\n";
-		$body .= 'References:' . $references . "\r\n";
+		$body .= empty($in_reply_to) ? '' : ('In-Reply-To:' . $in_reply_to . "\r\n");
+		$body .= empty($references) ? '' : ('References:' . $references . "\r\n");
 		$body .= 'Content-Type: multipart/mixed; boundary=' . $boundary . "\r\n\r\n";
 		$body .= '--' . $boundary . "\r\n";
 		$body .= 'Content-Type: text/html; charset=utf-8;' . "\r\n";
@@ -116,7 +123,7 @@ class Smtp extends Config
 		try
 		{
 			fwrite($handle, $command);
-			$handle_status = fgets($handle);
+			$handle_status = fread($handle, 512);
 			$status = '/^(5|4)/';
 			if(preg_match($status, $handle_status, $matches))
 			{

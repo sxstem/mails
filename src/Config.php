@@ -96,6 +96,26 @@ class Config
 				$this->smtp = 'ssl://smtp.qq.com';
 				$this->smtp_proxy = '465';
 				break;
+			case 'yeah.net':
+				$this->imap = '{imap.yeah.net:993/imap/ssl}';
+				$this->smtp = 'ssl://smtp.yeah.net';
+				$this->smtp_proxy = '465';
+				break;
+			case 'outlook.com':
+				$this->imap = '{outlook.office365.com:993/imap/ssl}';
+				$this->smtp = 'smtp.office365.com';
+				$this->smtp_proxy = '587';
+				break;
+			case 'hotmail.com':
+				$this->imap = '{outlook.office365.com:993/imap/ssl}';
+				$this->smtp = 'smtp.office365.com';
+				$this->smtp_proxy = '587';
+				break;
+			case 'gmail.com':
+				$this->imap = '{imap.gmail.com:993/imap/ssl}';
+				$this->smtp = 'ssl://smtp.gmail.com';
+				$this->smtp_proxy = '465';
+				break;
 		}
 	}
 

@@ -80,6 +80,7 @@ class Imap extends Config
 			if($uid)
 			{
 				$uid = is_array($uid) ? $uid : array($uid);
+				$data = array();
 				foreach ($uid as $u)
 				{
 					$msgno = $this->getMsgnoByUid($u);
@@ -171,11 +172,11 @@ class Imap extends Config
 		}
 		catch (Exception $ex)
 		{
-			throw new Exception('整理邮件头失败，UID::' . $ex->getMessage());
+			throw new Exception('整理邮件头失败，UID:' . $ex->getMessage());
 		}
 		catch (Error $er)
 		{
-			throw new Error('整理邮件头失败，UID:::' . $er->getMessage());
+			throw new Error('整理邮件头失败，UID:' . $er->getMessage());
 		}
 	}
 
@@ -238,7 +239,7 @@ class Imap extends Config
 				{
 					$body = imap_qprint($body);
 				}
-				if (($structure->parameters)[0]->attribute == 'charset')
+				if (is_array($structure->parameters) && empty($structure->ifdparameters) && ($structure->parameters)[0]->attribute == 'charset')
 				{
 					$body = iconv(($structure->parameters)[0]->value, 'utf-8//IGNORE', $body);
 				}
@@ -274,11 +275,11 @@ class Imap extends Config
 		}
 		catch (Exception $ex)
 		{
-			throw new Exception('获取邮件内容失败，MsgNo:' . $ex->getMessage());
+			throw new Exception('获取邮件内容失败，MsgNo:' . $msgno . $ex->getMessage());
 		}
 		catch (Error $er)
 		{
-			throw new Error('获取邮件内容失败，MsgNo:' . $er->getMessage());
+			throw new Error('获取邮件内容失败，MsgNo:' . $msgno . $er->getMessage());
 		}
 	}
 

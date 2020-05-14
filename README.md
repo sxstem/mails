@@ -58,5 +58,6 @@ $mail->imapClose();
 ```php
 $mail = new \Sxstem\Mails\Smtp(username, passwork);
 
-$result = $mail->send($subject, $to, $cc, $mails_body, $in_reply_to, $references, $attach);
+$result = $mail->send($subject, $to, $cc, $mails_body, $attach, $in_reply_to, $references);
+//$cc, $attach, $in_reply_to, $references can be ''
 ```
