@@ -30,19 +30,18 @@ class Smtp extends Config
 	private function ini()
 	{
 		// 握手
-		$this->execute($this->stream, "EHLO " . str_replace('ssl://', '', $this->smtp) . "\r\n");
+		$this->execute("EHLO " . $_SERVER['SERVER_NAME']);
 		// 登录验证
 		if ($this->smtp_proxy == '587')
 		{
-			$this->execute($this->stream, "STARTTLS\r\n");
-			stream_socket_enable_crypto($this->stream, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
-			$this->execute($this->stream, "EHLO " . str_replace('ssl://', '', $this->smtp) . "\r\n");
+			$this->execute("STARTTLS");
+			$this->execute("EHLO " . $_SERVER['SERVER_NAME']);
 		}
-		$this->execute($this->stream, "AUTH LOGIN\r\n");
+		$this->execute("AUTH LOGIN");
 		// 账号验证
-		$this->execute($this->stream,  base64_encode($this->username) . "\r\n");
+		$this->execute(base64_encode($this->username));
 		// 密码验证
-		$this->execute($this->stream,  base64_encode($this->password) . "\r\n");
+		$this->execute(base64_encode($this->password));
 	}
 
 
@@ -63,19 +62,23 @@ class Smtp extends Config
 	 */
 	public function send($subject, $to = array(), $cc = array(), $mails_body, $attach = array(), $in_reply_to = '', $references = '')
 	{
+		if (! is_array($to))
+		{
+			return array('ack' => 'failure', 'message' => '收件地址需为数组Array');
+		}
 		// 初始化邮件发送设置
 		$this->ini();
 		// 发件人
-		$this->execute($this->stream, 'MAIL FROM:<' . $this->username . ">\r\n");
+		$this->execute('MAIL FROM:<' . $this->username . ">");
 		// 收件人
 		foreach ($to as $t)
 		{
-			$this->execute($this->stream, 'RCPT TO:<' . $t . ">\r\n");
+			$this->execute('RCPT TO:<' . $t . ">");
 		}
 		// 抄送人
 		foreach ($cc as $c)
 		{
-			$this->execute($this->stream, 'RCPT TO:<' . $c . ">\r\n");
+			$this->execute('RCPT TO:<' . $c . ">");
 		}
 		// 邮件内容
 		$body = 'From:' . $this->username . "\r\n";
@@ -112,31 +115,65 @@ class Smtp extends Config
 			}
 		}
 		$body .= '--' . $boundary . "--\r\n";
-		$body .= "\r\n.\r\n";
-		$this->execute($this->stream, "DATA\r\n");
-		$this->execute($this->stream, $body);
-		$this->execute($this->stream, "QUIT\r\n");
+		$body .= "\r\n.";
+		$this->execute("DATA");
+		$this->execute($body);
+		$this->execute("QUIT");
+		$result = $this->executeStart();
+		return $result;
 	}
 
-	private function execute($handle, $command)
+	private function executeStart()
 	{
 		try
 		{
-			fwrite($handle, $command);
-			$handle_status = fread($handle, 512);
-			$status = '/^(5|4)/';
-			if(preg_match($status, $handle_status, $matches))
+			if (empty($this->execute_list) || empty($this->stream))
 			{
-				throw new Exception('邮件发送失败：' . $handle_status . ', ' . $command);
+				return array('ack' => 'failure', 'message' => '数据为空');
 			}
+			foreach ($this->execute_list as $command)
+			{
+				fwrite($this->stream, $command . "\r\n");
+				$handle_status = fread($this->stream, 512);
+				if ($this->debug)
+				{
+					dump($command);
+					var_dump($handle_status);
+				}
+				$status = '/^(5|4)/';
+				if(preg_match($status, $handle_status, $matches))
+				{
+					return array('ack' => 'failure', 'message' => '邮件发送失败：' . $command . "\n" . $handle_status);
+				}
+				if ($command == 'STARTTLS')
+				{
+					$crypto_method = STREAM_CRYPTO_METHOD_TLS_CLIENT;
+					$enable_crypto_result = stream_socket_enable_crypto($this->stream, true, $crypto_method);
+					if (! $enable_crypto_result)
+					{
+						return array('ack' => 'failure', 'message' => 'TLS开启失败');
+					}
+				}
+			}
+			return array('ack' => 'success', 'message' => '');
 		}
 		catch (Exception $ex)
 		{
-			throw new Exception($ex->getMessage());
+			return array('ack' => 'failure', 'message' => $ex->getMessage());
 		}
 		catch (Error $er)
 		{
-			throw new Error($er->getMessage());
+			return array('ack' => 'failure', 'message' => $er->getMessage());
 		}
+	}
+
+	private function execute($command)
+	{
+		$this->execute_list[] = $command;
+	}
+
+	public function debug($flag)
+	{
+		$this->debug = boolval($flag);
 	}
 }

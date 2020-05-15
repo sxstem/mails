@@ -58,6 +58,18 @@ class Config
 	protected $stream;
 
 	/**
+	 * smtp debug
+	 * @var resources
+	 */
+	protected $debug = false;
+
+	/**
+	 * execute_list
+	 * @var resources
+	 */
+	protected $execute_list = array();
+
+	/**
 	 * Connect imap
 	 * @username string
 	 * @password string
